@@ -1,0 +1,22 @@
+{
+  "name": "namaste_dev-reactjs",
+  "version": "1.0.0",
+  "description": "Build react app from scratch",
+  "main": "App.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Prajwal-kh/Namaste_Dev-ReactJS.git"
+  },
+  "author": "Prajwal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Prajwal-kh/Namaste_Dev-ReactJS/issues"
+  },
+  "homepage": "https://github.com/Prajwal-kh/Namaste_Dev-ReactJS#readme",
+  "devDependencies": {
+    "parcel": "^2.16.3"
+  }
+}
