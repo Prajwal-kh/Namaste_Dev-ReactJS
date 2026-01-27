@@ -2,7 +2,7 @@
 const heading = React.createElement(
     "h1",
     { id: "heading", className: "header" },
-    "Hello world from React!!"
+    "Hello world from React!!",
 );
 
 console.log(heading); // gives object representation of the heading
@@ -37,7 +37,7 @@ const parent = React.createElement(
     React.createElement("div", { id: "child" }, [
         React.createElement("h1", {}, "I am h1 tag"),
         React.createElement("h2", {}, "I am h2 tag"),
-    ])
+    ]),
     // sibings elements (for eg h1 & h2) can be passed as array in the third argument of createElement
 );
 console.log(parent);
