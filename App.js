@@ -1,4 +1,8 @@
-// using createElement method to create react elements & not html tags directly
+// In the console we get ReferenceError: React is not defined
+// Because React is not imported in this file
+import React from "react";
+import ReactDOM from "react-dom/client";
+
 const heading = React.createElement(
     "h1",
     { id: "heading", className: "header" },
