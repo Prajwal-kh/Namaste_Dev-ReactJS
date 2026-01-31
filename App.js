@@ -1,23 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-const heading = React.createElement(
-    "h1",
-    { id: "heading", className: "header" },
-    "Hello world from React!!",
-);
+// Functional Component
+const HeadingComponent = () => {
+    return <h1>Hello from Functional Component</h1>;
+};
+// Way to write Functional Component in JSX
+const HeadingComponent2 = () => <h1>Hello from JSX Element</h1>;
 
-// Babel Transpilation JSX to JS
-// JSX => Babel transpiles it to React.createElement => ReactElement which is a JS Object => HTML (DOM)
-const jsxHeading = <h1 id="heading">Hello world from JSX!!</h1>;
-
-// when line breaks jsx should be in ()
-const jsxHeading2 = (
-    <h1 id="heading" className="header">
-        Hello world from JSX 2!!
-    </h1>
+const HeadingComponent3 = () => (
+    <h1 className="heading">Hello from Multi-line JSX Element</h1>
 );
+const HeadingComponent4 = () => {
+    return (
+        <h1 className="heading">
+            Hello from Multi-line JSX Element with return
+        </h1>
+    );
+};
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(jsxHeading);
+root.render(<HeadingComponent />);
