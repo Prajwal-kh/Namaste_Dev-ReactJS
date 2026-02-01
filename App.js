@@ -1,24 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-// Functional Component
-const HeadingComponent = () => {
-    return <h1>Hello from Functional Component</h1>;
+const TitleComponent = () => {
+    return <h2>Hello from Functional Component</h2>;
 };
-// Way to write Functional Component in JSX
-const HeadingComponent2 = () => <h1>Hello from JSX Element</h1>;
 
-const HeadingComponent3 = () => (
-    <h1 className="heading">Hello from Multi-line JSX Element</h1>
-);
-const HeadingComponent4 = () => {
+// Component Composition - Nesting of components
+const HeadingComponent = () => {
     return (
-        <h1 className="heading">
-            Hello from Multi-line JSX Element with return
-        </h1>
+        <div>
+            {/* different ways to render a component */}
+            <TitleComponent />
+            <TitleComponent></TitleComponent>
+            {TitleComponent()}
+            <h1>This is a Heading Component</h1>
+        </div>
     );
 };
 
+// We can put Functional Component inside React Element or vice-versa
+const title = (
+    <div id="title">
+        Hello from React Element
+        <HeadingComponent />
+    </div>
+);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(<HeadingComponent />);
+root.render(title);
