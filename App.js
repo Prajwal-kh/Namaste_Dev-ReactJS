@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { restaurants } from "./rawData";
 
 // Create a Food Delivery App
 // Design App using Wireframe & plan -> Header, Body, Footer components
@@ -30,20 +31,25 @@ const HeaderComponet = () => {
     );
 };
 
-const RestroCard = (props) => {
-    const { name, cuisines, ratings, time } = props; // Destructuring props
+const RestroCard = ({ restaurant }) => {
+    const { name, cuisines, avgRating, sla, costForTwo, cloudinaryImageId } =
+        restaurant?.info;
+    const { deliveryTime } = sla;
     return (
         <>
             <div className="restaurant-card">
                 <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtr3m8ja5E320tKLeyGSJWUW6Hj4zOPTvmTs9Vs4S8wQ&s&ec=121528417"
-                    alt="Restaurant 1"
+                    src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/${cloudinaryImageId}`}
+                    alt={name}
+                    width={150}
+                    height={300}
                 />
                 <div className="restaurant-details">
                     <h3>{name}</h3>
-                    <p>{`Cuisine: ${[...cuisines]}`}</p>
-                    <p>{`Ratings: ${ratings}`}</p>
-                    <p>{`Delivery time: ${time} mins`}</p>
+                    <p>{`Cuisine: ${cuisines.join(", ")}`}</p>
+                    <p>{`Ratings: ${avgRating ? avgRating : "Not available"}`}</p>
+                    <p>{`Cost: ${costForTwo}`}</p>
+                    <p>{`Delivery time: ${deliveryTime} mins`}</p>
                 </div>
             </div>
         </>
@@ -65,42 +71,12 @@ const BodyComponent = () => {
                 </button>
             </div>
             <div className="restaurant-container">
-                <RestroCard
-                    name="Restaurant1"
-                    cuisines={["Italian, Mexican"]}
-                    ratings={"4.5"}
-                    time={"40"}
-                />
-                <RestroCard
-                    name="Restaurant2"
-                    cuisines={["Chinese, Thai"]}
-                    ratings={"4.2"}
-                    time={"30"}
-                />
-                <RestroCard
-                    name="Restaurant3"
-                    cuisines={["Indian, Continental"]}
-                    ratings={"4.8"}
-                    time={"50"}
-                />
-                <RestroCard
-                    name="Restaurant4"
-                    cuisines={["Mediterranean, Greek"]}
-                    ratings={"4.3"}
-                    time={"35"}
-                />
-                <RestroCard
-                    name="Restaurant5"
-                    cuisines={["Japanese, Korean"]}
-                    ratings={"4.6"}
-                    time={"45"}
-                />
-                <RestroCard
-                    name="Restaurant6"
-                    cuisines={["French, Spanish"]}
-                    ratings={"4.4"}
-                    time={"55"}
-                />
+                {restaurants.map((restaurant) => (
+                    <RestroCard
+                        restaurant={restaurant}
+                        key={restaurant.info.id}
+                    />
+                ))}
             </div>
         </div>
     );
