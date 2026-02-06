@@ -22,3 +22,12 @@ All react projects from namaste dev
 - HTTPs
 - Refer parcel docs
 - Different Dev & Prod bundles (after executing npx parcel index.html for dev & npx parcel build index.html for prod inside dist folder & hot reloading will be done through .parcel-cache)
+
+# Food Delivery App
+
+- Create a Food Delivery App
+- Design App using Wireframe & plan -> Header, Body, Footer components
+- Header -> Logo, Nav Items, Cart
+- Body -> Search Bar, Restaurant Container which will have Restaurant Cards
+- Restaurant Card -> Image, Name, Cusine, Ratings, Delivery Time
+- Footer -> Copyright, Links, Address, Contact
