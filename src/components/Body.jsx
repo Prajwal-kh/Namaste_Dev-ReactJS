@@ -1,19 +1,49 @@
 import React, { useEffect } from "react";
-import { restaurants } from "../utils/mockData";
 import { RestroCard } from "./RestroCard";
+import MenuCard from "./MenuCard";
 
 const Body = () => {
-    const [listOfRestaurants, setListOfRestaurants] =
-        React.useState(restaurants);
+    const [listOfRestaurants, setListOfRestaurants] = React.useState([]);
     const [restaurantName, setRestaurantName] = React.useState("");
-    // const handleFilter = () => {
-    //     const filteredList = listOfRestaurants.filter(
-    //         (restaurant) => restaurant.info.avgRating >= 4.0,
-    //     );
-    //     setListOfRestaurants(filteredList);
-    // };
+    const [selectedRestaurant, setSelectedRestaurant] = React.useState(null);
+
+    const fetchRestaurants = async () => {
+        try {
+            const response = await fetch(
+                "https://corsproxy.io/?url=https://namastedev.com/api/v1/listRestaurants",
+            );
+            const data = await response.json();
+            setListOfRestaurants(
+                data.data.data.cards[1].card.card.gridElements.infoWithStyle
+                    .restaurants,
+            );
+        } catch (error) {
+            console.error("Error fetching restaurants:", error);
+        }
+    };
+    const fetchOneRestaurant = async (id) => {
+        try {
+            const response = await fetch(
+                "https://corsproxy.io/?url=https://namastedev.com/api/v1/listRestaurantMenu/" +
+                    id,
+            );
+            const data = await response.json();
+            setSelectedRestaurant(
+                data.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards[1]
+                    .card.card.itemCards,
+            );
+        } catch (error) {
+            console.error("Error fetching restaurant menu:", error);
+        }
+    };
+
     useEffect(() => {
-        const filteredList = restaurants.filter((restaurant) =>
+        // API call to fetch the list of restaurants and update the state
+        fetchRestaurants();
+    }, []);
+
+    useEffect(() => {
+        const filteredList = listOfRestaurants?.filter((restaurant) =>
             restaurant.info.name
                 .toLowerCase()
                 .includes(restaurantName.toLowerCase()),
@@ -42,33 +72,36 @@ const Body = () => {
                 className="filter-btn"
                 type="button"
                 onClick={() => {
-                    const filteredList = listOfRestaurants.filter(
-                        (restaurant) => restaurant.info.avgRating >= 4.0,
+                    const filteredList = listOfRestaurants?.filter(
+                        (restaurant) => restaurant.info.avgRating >= 4.5,
                     );
                     setListOfRestaurants(filteredList);
-
-                    // multiple other ways to filter the list and update the state
-                    // setListOfRestaurants(
-                    //     listOfRestaurants.filter(
-                    //         (restaurant) => restaurant.info.avgRating >= 4.0,
-                    //     ),
-                    // );
-                    // setListOfRestaurants((prevValue) => {
-                    //     return prevValue.filter(
-                    //         (restaurant) => restaurant.info.avgRating >= 4.0,
-                    //     );
-                    // });
                 }}
             >
                 {"⭐ Top Rated"}
             </button>
             <div className="restaurant-container">
-                {listOfRestaurants.map((restaurant) => (
-                    <RestroCard
-                        restaurant={restaurant}
-                        key={restaurant.info.id}
-                    />
-                ))}
+                {selectedRestaurant ? (
+                    <>
+                        <button
+                            className="back-btn"
+                            onClick={() => setSelectedRestaurant(null)}
+                        >
+                            ← Back to Restaurants
+                        </button>
+                        {selectedRestaurant.map((menu) => (
+                            <MenuCard menuItem={menu} key={menu.card.info.id} />
+                        ))}
+                    </>
+                ) : (
+                    listOfRestaurants?.map((restaurant) => (
+                        <RestroCard
+                            restaurant={restaurant}
+                            key={restaurant.info.id}
+                            onCardClick={fetchOneRestaurant}
+                        />
+                    ))
+                )}
             </div>
         </div>
     );
