@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { RestroCard } from "./RestroCard";
 import MenuCard from "./MenuCard";
+import Shimmer from "./Shimmer";
 
 const Body = () => {
     const [listOfRestaurants, setListOfRestaurants] = React.useState([]);
@@ -51,6 +52,11 @@ const Body = () => {
         setListOfRestaurants(filteredList);
     }, [restaurantName, setRestaurantName]);
 
+    // Conditional rendering
+    if (listOfRestaurants?.length === 0) {
+        // return <h1 className="restaurant-container">Loading...</h1>; // better to use shummer UI instead of loading text
+        return <Shimmer />;
+    }
     return (
         <div className="body">
             <div className="search-bar">
