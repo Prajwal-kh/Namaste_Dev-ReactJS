@@ -52,12 +52,9 @@ const Body = () => {
         setListOfRestaurants(filteredList);
     }, [restaurantName, setRestaurantName]);
 
-    // Conditional rendering
-    if (listOfRestaurants?.length === 0) {
-        // return <h1 className="restaurant-container">Loading...</h1>; // better to use shummer UI instead of loading text
-        return <Shimmer />;
-    }
-    return (
+    return listOfRestaurants?.length === 0 ? (
+        <Shimmer />
+    ) : (
         <div className="body">
             <div className="search-bar">
                 <input
