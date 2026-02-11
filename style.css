@@ -110,6 +110,15 @@
     background-color: #ccc;
     border-radius: 8px;
 }
+.logout-btn {
+    padding-left: 20px;
+    margin-top: 0;
+    font-size: 20px;
+    background-color: coral;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
 .footer {
     text-align: center;
     padding: 10px;
