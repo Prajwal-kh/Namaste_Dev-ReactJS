@@ -16,14 +16,14 @@ const Body = () => {
             const response = await fetch(
                 "https://corsproxy.io/?url=https://namastedev.com/api/v1/listRestaurants",
             );
-            const data = await response.json();
+            const json = await response.json();
             setListOfRestaurants(
-                data.data.data.cards[1].card.card.gridElements.infoWithStyle
-                    .restaurants,
+                json?.data?.data?.cards[1]?.card?.card?.gridElements
+                    ?.infoWithStyle?.restaurants,
             );
             setFilteredRestaurants(
-                data.data.data.cards[1].card.card.gridElements.infoWithStyle
-                    .restaurants,
+                json?.data?.data?.cards[1]?.card?.card?.gridElements
+                    ?.infoWithStyle?.restaurants,
             );
         } catch (error) {
             console.error("Error fetching restaurants:", error);
@@ -35,10 +35,10 @@ const Body = () => {
                 "https://corsproxy.io/?url=https://namastedev.com/api/v1/listRestaurantMenu/" +
                     id,
             );
-            const data = await response.json();
+            const json = await response.json();
             setSelectedRestaurant(
-                data.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards[1]
-                    .card.card.itemCards,
+                json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR
+                    ?.cards[1]?.card?.card?.itemCards,
             );
         } catch (error) {
             console.error("Error fetching restaurant menu:", error);
