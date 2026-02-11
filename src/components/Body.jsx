@@ -5,8 +5,11 @@ import Shimmer from "./Shimmer";
 
 const Body = () => {
     const [listOfRestaurants, setListOfRestaurants] = React.useState([]);
+    const [filteredRestaurants, setFilteredRestaurants] = React.useState([]);
     const [restaurantName, setRestaurantName] = React.useState("");
     const [selectedRestaurant, setSelectedRestaurant] = React.useState(null);
+    console.log("listOfRest", listOfRestaurants); // initially empty, then gets populated with API data in useEffect
+    console.log("filteredRest", filteredRestaurants); // initially empty, then gets populated with API data in useEffect & then gets updated based on search/filter
 
     const fetchRestaurants = async () => {
         try {
@@ -15,6 +18,10 @@ const Body = () => {
             );
             const data = await response.json();
             setListOfRestaurants(
+                data.data.data.cards[1].card.card.gridElements.infoWithStyle
+                    .restaurants,
+            );
+            setFilteredRestaurants(
                 data.data.data.cards[1].card.card.gridElements.infoWithStyle
                     .restaurants,
             );
@@ -43,14 +50,18 @@ const Body = () => {
         fetchRestaurants();
     }, []);
 
-    useEffect(() => {
+    const handleOnSearch = () => {
+        if (!restaurantName) {
+            fetchRestaurants();
+            return;
+        }
         const filteredList = listOfRestaurants?.filter((restaurant) =>
             restaurant.info.name
                 .toLowerCase()
                 .includes(restaurantName.toLowerCase()),
         );
-        setListOfRestaurants(filteredList);
-    }, [restaurantName, setRestaurantName]);
+        setFilteredRestaurants(filteredList);
+    };
 
     return listOfRestaurants?.length === 0 ? (
         <Shimmer />
@@ -67,7 +78,11 @@ const Body = () => {
                         setRestaurantName(e.target.value);
                     }}
                 />
-                <button type="button" className="search-button">
+                <button
+                    type="button"
+                    className="search-button"
+                    onClick={handleOnSearch}
+                >
                     Search
                 </button>
             </div>
@@ -97,7 +112,7 @@ const Body = () => {
                         ))}
                     </>
                 ) : (
-                    listOfRestaurants?.map((restaurant) => (
+                    filteredRestaurants?.map((restaurant) => (
                         <RestroCard
                             restaurant={restaurant}
                             key={restaurant.info.id}
