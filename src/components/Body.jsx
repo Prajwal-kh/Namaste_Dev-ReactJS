@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RestroCard } from "./RestroCard";
-import MenuCard from "./MenuCard";
 import Shimmer from "./Shimmer";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const Body = () => {
-    const [listOfRestaurants, setListOfRestaurants] = React.useState([]);
-    const [filteredRestaurants, setFilteredRestaurants] = React.useState([]);
-    const [restaurantName, setRestaurantName] = React.useState("");
-    const [selectedRestaurant, setSelectedRestaurant] = React.useState(null);
-    const redirect = useNavigate();
+    const [listOfRestaurants, setListOfRestaurants] = useState([]);
+    const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+    const [restaurantName, setRestaurantName] = useState("");
+
     console.log("listOfRest", listOfRestaurants); // initially empty, then gets populated with API data in useEffect
     console.log("filteredRest", filteredRestaurants); // initially empty, then gets populated with API data in useEffect & then gets updated based on search/filter
 
@@ -29,22 +27,6 @@ const Body = () => {
             );
         } catch (error) {
             console.error("Error fetching restaurants:", error);
-        }
-    };
-    const fetchOneRestaurant = async (id) => {
-        try {
-            const response = await fetch(
-                "https://corsproxy.io/?url=https://namastedev.com/api/v1/listRestaurantMenu/" +
-                    id,
-            );
-            const json = await response.json();
-            setSelectedRestaurant(
-                json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR
-                    ?.cards[1]?.card?.card?.itemCards,
-            );
-            redirect("/restaurant/" + id);
-        } catch (error) {
-            console.error("Error fetching restaurant menu:", error);
         }
     };
 
@@ -102,30 +84,17 @@ const Body = () => {
                 {"⭐ Top Rated"}
             </button>
             <div className="restaurant-container">
-                {selectedRestaurant ? (
-                    <>
-                        <button
-                            className="back-btn"
-                            onClick={() => {
-                                setSelectedRestaurant(null);
-                                redirect("/");
-                            }}
-                        >
-                            ← Back to Restaurants
-                        </button>
-                        {selectedRestaurant.map((menu) => (
-                            <MenuCard menuItem={menu} key={menu.card.info.id} />
-                        ))}
-                    </>
-                ) : (
-                    filteredRestaurants?.map((restaurant) => (
+                {filteredRestaurants?.map((restaurant) => (
+                    <Link
+                        to={"/restaurant/" + restaurant.info.id}
+                        key={restaurant.info.id}
+                    >
                         <RestroCard
                             restaurant={restaurant}
                             key={restaurant.info.id}
-                            onCardClick={fetchOneRestaurant}
                         />
-                    ))
-                )}
+                    </Link>
+                ))}
             </div>
         </div>
     );

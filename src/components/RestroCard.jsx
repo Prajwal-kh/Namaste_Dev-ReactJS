@@ -1,19 +1,12 @@
 import { RESTRO_IMG_CDN_URL } from "../utils/config";
 
-export const RestroCard = ({ restaurant, onCardClick }) => {
-    const {
-        name,
-        cuisines,
-        avgRating,
-        sla,
-        costForTwo,
-        cloudinaryImageId,
-        id,
-    } = restaurant?.info;
+export const RestroCard = ({ restaurant }) => {
+    const { name, cuisines, avgRating, sla, costForTwo, cloudinaryImageId } =
+        restaurant?.info;
     const { deliveryTime } = sla;
     return (
         <>
-            <div className="restaurant-card" onClick={() => onCardClick(id)}>
+            <div className="restaurant-card">
                 <img
                     src={`${RESTRO_IMG_CDN_URL}/${cloudinaryImageId}`}
                     alt={name}
