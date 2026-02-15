@@ -2,12 +2,14 @@ import React, { useEffect } from "react";
 import { RestroCard } from "./RestroCard";
 import MenuCard from "./MenuCard";
 import Shimmer from "./Shimmer";
+import { useNavigate } from "react-router";
 
 const Body = () => {
     const [listOfRestaurants, setListOfRestaurants] = React.useState([]);
     const [filteredRestaurants, setFilteredRestaurants] = React.useState([]);
     const [restaurantName, setRestaurantName] = React.useState("");
     const [selectedRestaurant, setSelectedRestaurant] = React.useState(null);
+    const redirect = useNavigate();
     console.log("listOfRest", listOfRestaurants); // initially empty, then gets populated with API data in useEffect
     console.log("filteredRest", filteredRestaurants); // initially empty, then gets populated with API data in useEffect & then gets updated based on search/filter
 
@@ -40,6 +42,7 @@ const Body = () => {
                 json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR
                     ?.cards[1]?.card?.card?.itemCards,
             );
+            redirect("/restaurant/" + id);
         } catch (error) {
             console.error("Error fetching restaurant menu:", error);
         }
@@ -103,7 +106,10 @@ const Body = () => {
                     <>
                         <button
                             className="back-btn"
-                            onClick={() => setSelectedRestaurant(null)}
+                            onClick={() => {
+                                setSelectedRestaurant(null);
+                                redirect("/");
+                            }}
                         >
                             ← Back to Restaurants
                         </button>
