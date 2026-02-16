@@ -123,6 +123,12 @@
     border: none;
     cursor: pointer;
 }
+.user-card {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 20px;
+}
 .footer {
     text-align: center;
     padding: 10px;
