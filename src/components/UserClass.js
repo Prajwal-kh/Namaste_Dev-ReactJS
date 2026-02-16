@@ -9,38 +9,65 @@ class UserClass extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            count: 0,
+            userInfo: {
+                bio: "dummy bio",
+                location: "dummy location",
+                avatar_url:
+                    "https://avatars.githubusercontent.com/u/104777381?v=4",
+            },
             isAvailable: false,
             workingHours: "9am - 6pm",
         };
         console.log("Child Constructor");
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         console.log("Child component did mount");
+        // API call to fetch data from github:
+        const url = "https://api.github.com/users/" + this.props.name;
+        const data = await fetch(url);
+        const json = await data.json();
+        console.log(json);
+        this.setState({
+            userInfo: json,
+        });
+
+        this.timer = setInterval(() => {
+            console.log("Timer called");
+        }, 1000);
+    }
+
+    // componentDidUpdate is called when the component is updated or re-rendered due to change in state or props
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.userInfo.bio !== this.state.userInfo.bio) {
+            console.log("bio state has changed");
+        }
+        console.log("Child component did update");
+    }
+
+    // componentWillUnmount is called when the component is removed from the DOM or we navigate to another page
+    componentWillUnmount() {
+        clearInterval(this.timer);
+        console.log("Child component will unmount");
     }
 
     render() {
         console.log("Child Render method");
         const { name, role } = this.props;
-        const { count, isAvailable, workingHours } = this.state;
-        const handleOnClick = () => {
-            this.setState({
-                count: count + 1,
-                isAvailable: !isAvailable,
-            });
-        };
+        const { bio, location, avatar_url } = this.state.userInfo;
+        // debugger;
 
         return (
             <div className="user-card">
-                <h2>{name}</h2>
-                <p>{role}</p>
-                <p>gmail: praj@gmail.com</p>
-                <p>Count: {count}</p>
-                <button onClick={handleOnClick}>+</button>
-                <p>Shift: {workingHours}</p>
+                <img src={avatar_url} alt="avatar" width={200} height={200} />
+                <h2>Name: {name}</h2>
+                <p>Role: {role}</p>
+                <p>Bio: {bio}</p>
+                <p>Location: {location}</p>
+                <p>Shift: {this.state.workingHours}</p>
                 <p>
-                    Available to connect: {isAvailable === true ? "Yes" : "No"}
+                    Available to connect:{" "}
+                    {this.state.isAvailable ? "Yes" : "No"}
                 </p>
             </div>
         );

@@ -32,7 +32,8 @@ class About extends React.Component {
                     food delivery needs!
                 </p>
                 <p>Our Team</p>
-                <UserClass name={"Prajwal's Class"} role={"Developer"} />
+                <UserClass name={"Prajwal-kh"} role={"Developer"} />
+                <UserClass name={"Pratik"} role={"Wordpress Developer"} />
             </div>
         );
     }
