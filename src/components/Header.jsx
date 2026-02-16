@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { LOGO_URL } from "../utils/config";
 import { Link } from "react-router";
+import useUserStatus from "../utils/useUserStatus";
 
 const Header = () => {
-    const [userStatus, setUserStatus] = useState("Login");
+    const [userLoginStatus, setUserLoginStatus] = useState("Login");
+    const userStatus = useUserStatus();
     return (
         <div className="header">
             <div className="logo-container">
@@ -16,6 +18,7 @@ const Header = () => {
             {/* Don't use anchor tag to redirect to new paths in react as it can reload the app */}
             <div className="nav-items">
                 <ul>
+                    <li>{userStatus ? "Online🟢" : "Offline🔴"}</li>
                     <li>
                         <Link to={"/"}>Home</Link>
                     </li>
@@ -31,12 +34,14 @@ const Header = () => {
                             type="button"
                             className="logout-btn"
                             onClick={() =>
-                                setUserStatus(
-                                    userStatus === "Login" ? "Logout" : "Login",
+                                setUserLoginStatus(
+                                    userLoginStatus === "Login"
+                                        ? "Logout"
+                                        : "Login",
                                 )
                             }
                         >
-                            {userStatus}
+                            {userLoginStatus}
                         </button>
                     </li>
                 </ul>

@@ -1,52 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { RestroCard } from "./RestroCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router";
+import { useRestaurantList } from "../utils/useRestaurantList";
+import useUserStatus from "../utils/useUserStatus";
 
 const Body = () => {
-    const [listOfRestaurants, setListOfRestaurants] = useState([]);
-    const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-    const [restaurantName, setRestaurantName] = useState("");
-
+    const {
+        listOfRestaurants,
+        filteredRestaurants,
+        restaurantName,
+        setRestaurantNameFunc,
+        fetchRestaurants,
+        getFilteredRestaurants,
+        getTopRatedRestaurants,
+    } = useRestaurantList();
+    const userStatus = useUserStatus();
+    console.log("userStatus", userStatus);
     console.log("listOfRest", listOfRestaurants); // initially empty, then gets populated with API data in useEffect
     console.log("filteredRest", filteredRestaurants); // initially empty, then gets populated with API data in useEffect & then gets updated based on search/filter
-
-    const fetchRestaurants = async () => {
-        try {
-            const response = await fetch(
-                "https://corsproxy.io/?url=https://namastedev.com/api/v1/listRestaurants",
-            );
-            const json = await response.json();
-            setListOfRestaurants(
-                json?.data?.data?.cards[1]?.card?.card?.gridElements
-                    ?.infoWithStyle?.restaurants,
-            );
-            setFilteredRestaurants(
-                json?.data?.data?.cards[1]?.card?.card?.gridElements
-                    ?.infoWithStyle?.restaurants,
-            );
-        } catch (error) {
-            console.error("Error fetching restaurants:", error);
-        }
-    };
-
-    useEffect(() => {
-        // API call to fetch the list of restaurants and update the state
-        fetchRestaurants();
-    }, []);
 
     const handleOnSearch = () => {
         if (!restaurantName) {
             fetchRestaurants();
             return;
         }
-        const filteredList = listOfRestaurants?.filter((restaurant) =>
-            restaurant.info.name
-                .toLowerCase()
-                .includes(restaurantName.toLowerCase()),
-        );
-        setFilteredRestaurants(filteredList);
+        getFilteredRestaurants();
     };
+
+    if (!userStatus) {
+        return (
+            <div className="offline-status">
+                <h1>You are currently offline.</h1>
+                <p>Please check your internet connection and try again.</p>
+            </div>
+        );
+    }
 
     return listOfRestaurants?.length === 0 ? (
         <Shimmer />
@@ -60,7 +49,7 @@ const Body = () => {
                     className="search-input"
                     value={restaurantName}
                     onChange={(e) => {
-                        setRestaurantName(e.target.value);
+                        setRestaurantNameFunc(e.target.value);
                     }}
                 />
                 <button
@@ -74,12 +63,7 @@ const Body = () => {
             <button
                 className="filter-btn"
                 type="button"
-                onClick={() => {
-                    const filteredList = listOfRestaurants?.filter(
-                        (restaurant) => restaurant.info.avgRating >= 4.5,
-                    );
-                    setListOfRestaurants(filteredList);
-                }}
+                onClick={getTopRatedRestaurants}
             >
                 {"⭐ Top Rated"}
             </button>
