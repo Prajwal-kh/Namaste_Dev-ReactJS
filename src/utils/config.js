@@ -9,3 +9,6 @@ export const MENU_API =
 
 export const RESTAURANT_LIST_API_URL =
     "https://corsproxy.io/?url=https://namastedev.com/api/v1/listRestaurants";
+
+export const SWIGGY_GET_API =
+    "https://www.swiggy.com/dapi/restaurants/list/v5?lat=13.0035068&lng=77.5890953&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
