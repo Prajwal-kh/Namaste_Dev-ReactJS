@@ -12,9 +12,12 @@ export const useRestaurantMenu = (resId) => {
         try {
             const response = await fetch(MENU_API + resId);
             const json = await response.json();
+            console.log("json", json);
             setRestaurantMenu(
-                json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR
-                    ?.cards[1]?.card?.card?.itemCards,
+                json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards,
+            );
+            console.log(
+                json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards,
             );
         } catch (error) {
             console.error("Error fetching restaurant menu:", error);

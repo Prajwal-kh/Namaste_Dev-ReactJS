@@ -1,21 +1,27 @@
-import React from "react";
-import { RESTRO_IMG_CDN_URL } from "../utils/config";
+import React, { useState } from "react";
+import ItemCard from "./ItemCard";
 
 const MenuItems = ({ restaurantMenu }) => {
-    const { name, price, description, imageId } =
-        restaurantMenu?.card?.info || {};
+    const { title, itemCards } = restaurantMenu?.card?.card;
+    const [itemsVisible, setItemsVisible] = useState(false);
+
     return (
-        <div className="restaurant-card">
-            <div className="restaurant-details">
-                <img
-                    src={`${RESTRO_IMG_CDN_URL}/${imageId}`}
-                    alt={name}
-                    width={150}
-                    height={300}
-                />
-                <h2>{name}</h2>
-                <p>Price: {price / 100}</p>
-                <p>{description}</p>
+        <div className="mx-6">
+            <div className="rounded-base border-gray-300 border-b-2 shadow-md bg-gray-200 my-2">
+                <button
+                    className="flex justify-between font-medium w-full mr-4 p-4"
+                    type="button"
+                    onClick={() => {
+                        setItemsVisible(!itemsVisible);
+                    }}
+                >
+                    <span>{`${title} (${itemCards.length})`}</span>
+                    <span>{itemsVisible ? "∧" : "v"}</span>
+                </button>
+                {itemsVisible &&
+                    itemCards?.map((items) => (
+                        <ItemCard items={items} key={items.card.info.id} />
+                    ))}
             </div>
         </div>
     );
