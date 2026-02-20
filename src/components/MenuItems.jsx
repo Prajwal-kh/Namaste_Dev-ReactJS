@@ -1,9 +1,7 @@
-import React, { useState } from "react";
 import ItemCard from "./ItemCard";
 
-const MenuItems = ({ restaurantMenu }) => {
+const MenuItems = ({ restaurantMenu, showMenuItem, setMenuItemIndex }) => {
     const { title, itemCards } = restaurantMenu?.card?.card;
-    const [itemsVisible, setItemsVisible] = useState(false);
 
     return (
         <div className="mx-6">
@@ -12,13 +10,16 @@ const MenuItems = ({ restaurantMenu }) => {
                     className="flex justify-between font-medium w-full mr-4 p-4"
                     type="button"
                     onClick={() => {
-                        setItemsVisible(!itemsVisible);
+                        setMenuItemIndex();
                     }}
                 >
                     <span>{`${title} (${itemCards.length})`}</span>
-                    <span>{itemsVisible ? "∧" : "v"}</span>
+                    <span>{showMenuItem ? "∧" : "v"}</span>
                 </button>
-                {itemsVisible &&
+                {/* Develope a feature to make the other accordian collapsable if one is opened using React's lifting state up */}
+                {/* Which means give control to show accordian items to this components's parent component use react dev tools to check */}
+                {/* Once we implement this MenuCard.jsx component will be called as controlled component as its controlling this component's state & this becomes uncontrolled component */}
+                {showMenuItem &&
                     itemCards?.map((items) => (
                         <ItemCard items={items} key={items.card.info.id} />
                     ))}

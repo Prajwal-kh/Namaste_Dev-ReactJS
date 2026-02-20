@@ -2,13 +2,14 @@ import { useParams } from "react-router";
 import Shimmer from "./Shimmer";
 import MenuItems from "./MenuItems";
 import { useRestaurantMenu } from "../utils/useRestaurantMenu";
+import { useState } from "react";
 
 const MenuCard = () => {
     const { id } = useParams();
-    console.log("params", id);
 
     const restaurantMenu = useRestaurantMenu(id);
-    console.log(restaurantMenu);
+    const [menuItemIndex, setMenuItemIndex] = useState(0);
+
     const categoriesMenu = restaurantMenu?.filter(
         (category) =>
             category?.card?.card?.["@type"] ===
@@ -18,10 +19,12 @@ const MenuCard = () => {
 
     return categoriesMenu ? (
         <div className="mt-6">
-            {categoriesMenu.map((menu) => (
+            {categoriesMenu.map((menu, index) => (
                 <MenuItems
                     key={menu?.card?.card?.title}
                     restaurantMenu={menu}
+                    showMenuItem={index === menuItemIndex ? true : false}
+                    setMenuItemIndex={() => setMenuItemIndex(index)}
                 />
             ))}
         </div>
