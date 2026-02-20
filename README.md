@@ -31,3 +31,9 @@ All react projects from namaste dev
 - Body -> Search Bar, Restaurant Container which will have Restaurant Cards
 - Restaurant Card -> Image, Name, Cusine, Ratings, Delivery Time
 - Footer -> Copyright, Links, Address, Contact
+
+# Used Tailwind CSS
+
+- To Style our application we intially used normal css then shifted towards css framework Tailwind.
+- As we are using Parcel bundler in our application we have to refer installation docs using parcel.
+- npx tailwindcss init to create tailwind.config.ts file

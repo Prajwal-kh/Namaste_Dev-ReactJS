@@ -7,6 +7,7 @@ const MenuCard = () => {
     const { id } = useParams();
 
     const restaurantMenu = useRestaurantMenu(id);
+    console.log(restaurantMenu);
 
     return restaurantMenu ? (
         <div className="restaurant-container">

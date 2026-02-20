@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { RestroCard } from "./RestroCard";
+import { RestroCard, withRestroCard } from "./RestroCard";
 import Shimmer from "./Shimmer";
 import { SWIGGY_GET_API } from "../utils/config";
 
@@ -7,6 +7,7 @@ const Grocery = () => {
     const [listOfGroceries, setListOfGroceries] = useState([]);
     const [filteredGroceries, setFilteredGroceries] = useState([]);
     const [groceryName, setGroceryName] = useState("");
+    const RestaurantCardWithLabel = withRestroCard(RestroCard);
 
     const fetchGroceries = async () => {
         try {
@@ -63,10 +64,21 @@ const Grocery = () => {
                     Search
                 </button>
             </div>
-            <div className="restaurant-container">
-                {filteredGroceries?.map((grocery) => (
-                    <RestroCard restaurant={grocery} key={grocery.info.id} />
-                ))}
+            <div className="flex flex-wrap">
+                {filteredGroceries?.map((grocery) => {
+                    return grocery?.info?.aggregatedDiscountInfoV3
+                        ?.discountTag !== undefined ? (
+                        <RestaurantCardWithLabel
+                            restaurant={grocery}
+                            key={grocery.info.id}
+                        />
+                    ) : (
+                        <RestroCard
+                            restaurant={grocery}
+                            key={grocery.info.id}
+                        />
+                    );
+                })}
             </div>
         </div>
     );

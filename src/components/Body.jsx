@@ -16,7 +16,6 @@ const Body = () => {
         getTopRatedRestaurants,
     } = useRestaurantList();
     const userStatus = useUserStatus();
-    console.log("userStatus", userStatus);
     console.log("listOfRest", listOfRestaurants); // initially empty, then gets populated with API data in useEffect
     console.log("filteredRest", filteredRestaurants); // initially empty, then gets populated with API data in useEffect & then gets updated based on search/filter
 
@@ -40,13 +39,13 @@ const Body = () => {
     return listOfRestaurants?.length === 0 ? (
         <Shimmer />
     ) : (
-        <div className="body">
-            <div className="search-bar">
+        <div className="p-2">
+            <div className="m-4 flex">
                 <input
                     name="restaurantName"
                     type="text"
                     placeholder="Search for restaurants or cuisines"
-                    className="search-input"
+                    className="p-2 border focus:outline-amber-600 rounded-sm cursor-text w-full"
                     value={restaurantName}
                     onChange={(e) => {
                         setRestaurantNameFunc(e.target.value);
@@ -54,20 +53,20 @@ const Body = () => {
                 />
                 <button
                     type="button"
-                    className="search-button"
+                    className="p-2 ml-2 bg-amber-600 rounded-sm cursor-pointer"
                     onClick={handleOnSearch}
                 >
                     Search
                 </button>
             </div>
             <button
-                className="filter-btn"
+                className="bg-green-600 p-2 m-4 cursor-pointer rounded-sm hover:animate-pulse"
                 type="button"
                 onClick={getTopRatedRestaurants}
             >
                 {"⭐ Top Rated"}
             </button>
-            <div className="restaurant-container">
+            <div className="flex flex-wrap">
                 {filteredRestaurants?.map((restaurant) => (
                     <Link
                         to={"/restaurant/" + restaurant.info.id}
