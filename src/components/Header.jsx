@@ -1,11 +1,34 @@
-import { useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { LOGO_URL } from "../utils/config";
 import { Link } from "react-router";
 import useUserStatus from "../utils/useUserStatus";
+import { UserContext } from "../utils/UserContext";
 
 const Header = () => {
-    const [userLoginStatus, setUserLoginStatus] = useState("Login");
     const userStatus = useUserStatus();
+    const { loggedInUser } = useContext(UserContext);
+
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const dropdownRef = useRef();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className="flex justify-between bg-amber-600 shadow-lg m-2">
             <div className="logo-container">
@@ -15,40 +38,62 @@ const Header = () => {
                     className="w-15 m-3"
                 />
             </div>
-            {/* Don't use anchor tag to redirect to new paths in react as it can reload the app */}
+
             <div className="flex items-center">
-                <ul className="flex p-3 m-3 text-lg font-medium">
+                <ul className="flex p-3 m-3 text-lg font-medium items-center">
                     <li className="px-4">
                         {userStatus ? "Online🟢" : "Offline🔴"}
                     </li>
                     <li className="px-2 hover:text-amber-50">
-                        <Link to={"/"}>Home</Link>
+                        <Link to="/">Home</Link>
                     </li>
                     <li className="px-2 hover:text-amber-50">
-                        <Link to={"/about"}>About</Link>
+                        <Link to="/about">About</Link>
                     </li>
                     <li className="px-2 hover:text-amber-50">
-                        <Link to={"/contact"}>Contact</Link>
+                        <Link to="/contact">Contact</Link>
                     </li>
                     <li className="px-2 hover:text-amber-50">
-                        <Link to={"/grocery"}>Groceries</Link>
+                        <Link to="/grocery">Groceries</Link>
                     </li>
-                    <li className="px-2 hover:text-amber-50">Cart</li>
-                    <li className="pl-6">
-                        <button
-                            type="button"
-                            className="logout-btn"
-                            onClick={() =>
-                                setUserLoginStatus(
-                                    userLoginStatus === "Login"
-                                        ? "Logout"
-                                        : "Login",
-                                )
-                            }
-                        >
-                            {userLoginStatus}
-                        </button>
-                    </li>
+
+                    {isLoggedIn && (
+                        <li className="relative px-2" ref={dropdownRef}>
+                            <div
+                                className="cursor-pointer hover:text-amber-50"
+                                onClick={() => setShowDropdown((prev) => !prev)}
+                            >
+                                {loggedInUser}
+                            </div>
+
+                            {showDropdown && (
+                                <div className="absolute mt-2 w-32 bg-white text-black shadow-md rounded-md">
+                                    <button
+                                        className="block w-full py-2 hover:cursor-pointer"
+                                        onClick={() => {
+                                            setIsLoggedIn(false);
+                                            setShowDropdown(false);
+                                        }}
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </li>
+                    )}
+
+                    {!isLoggedIn && (
+                        <li className="px-2">
+                            <button
+                                className="bg-white text-black px-3 py-1 rounded-md"
+                                onClick={() => setIsLoggedIn(true)}
+                            >
+                                Login
+                            </button>
+                        </li>
+                    )}
+
+                    <li className="pl-4 hover:text-amber-50">Cart</li>
                 </ul>
             </div>
         </div>

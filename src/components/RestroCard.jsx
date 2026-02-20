@@ -28,7 +28,6 @@ export const RestroCard = ({ restaurant }) => {
 // Higher order component which takes a component as an parameter and returns a component:
 export const withRestroCard = (RestroCard) => {
     return (props) => {
-        console.log(props);
         return (
             <div>
                 <label className="absolute p-1 m-4 font-bold text-white bg-red-500">
