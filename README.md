@@ -36,4 +36,12 @@ All react projects from namaste dev
 
 - To Style our application we intially used normal css then shifted towards css framework Tailwind.
 - As we are using Parcel bundler in our application we have to refer installation docs using parcel.
-- npx tailwindcss init to create tailwind.config.ts file
+
+# Redux Toolkit
+
+- Install @reduxjs/toolkit and react-redux
+- Build store
+- Connect store to the app
+- Slice (cartSlice)
+- dispatch (action)
+- Selector

@@ -9,10 +9,13 @@ import ErrorPage from "./components/ErrorPage";
 import MenuCard from "./components/MenuCard";
 import Shimmer from "./components/Shimmer";
 import { UserContext } from "./utils/UserContext";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
 // import Grocery from "./components/Grocery";
 
 const Home = lazy(() => import("./components/Body"));
 const Grocery = lazy(() => import("./components/Grocery"));
+const Cart = lazy(() => import("./components/Cart"));
 
 const AppLayout = () => {
     const [userName, setUserName] = useState("");
@@ -23,16 +26,20 @@ const AppLayout = () => {
 
     return (
         <div className="app">
-            {/* overriden userName is only accessible to Header component */}
-            {/* Also passed in setUserName func to modify the context anytime we want from any Header's child component as we have wrapped only header component */}
-            {/* To use it we have use useContext hook & then destructure & call this setUserName func */}
-            <UserContext.Provider
-                value={{ loggedInUser: userName, setUserName }}
-            >
-                <Header />
-            </UserContext.Provider>
-            <Outlet />
-            <Footer />
+            <Provider store={appStore}>
+                {/* overriden userName is only accessible to Header component */}
+                {/* Also passed in setUserName func to modify the context anytime we want from any Header's child component as we have wrapped only header component */}
+                {/* To use it we have use useContext hook & then destructure & call this setUserName func */}
+                <UserContext.Provider
+                    value={{ loggedInUser: userName, setUserName }}
+                >
+                    <Header />
+                </UserContext.Provider>
+                <Suspense fallback={<Shimmer />}>
+                    <Outlet />
+                </Suspense>
+                <Footer />
+            </Provider>
         </div>
     );
 };
@@ -43,11 +50,7 @@ const appRouter = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: (
-                    <Suspense fallback={<Shimmer />}>
-                        <Home />
-                    </Suspense>
-                ),
+                element: <Home />,
             },
             {
                 path: "/about",
@@ -59,15 +62,15 @@ const appRouter = createBrowserRouter([
             },
             {
                 path: "/grocery",
-                element: (
-                    <Suspense fallback={"Loading groceries..."}>
-                        <Grocery />
-                    </Suspense>
-                ),
+                element: <Grocery />,
             },
             {
                 path: "/restaurant/:id",
                 element: <MenuCard />,
+            },
+            {
+                path: "/cart",
+                element: <Cart />,
             },
         ],
         errorElement: <ErrorPage />,

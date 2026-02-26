@@ -3,6 +3,7 @@ import { LOGO_URL } from "../utils/config";
 import { Link } from "react-router";
 import useUserStatus from "../utils/useUserStatus";
 import { UserContext } from "../utils/UserContext";
+import { useSelector } from "react-redux";
 
 const Header = () => {
     const userStatus = useUserStatus();
@@ -10,6 +11,10 @@ const Header = () => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(true);
     const [showDropdown, setShowDropdown] = useState(false);
+
+    // Subscribing to the store using selector
+    const cartItems = useSelector((store) => store.cart.items);
+    console.log(cartItems);
 
     const dropdownRef = useRef();
 
@@ -93,7 +98,9 @@ const Header = () => {
                         </li>
                     )}
 
-                    <li className="pl-4 hover:text-amber-50">Cart</li>
+                    <li className="pl-4 hover:text-amber-50">
+                        <Link to="/cart">Cart ({cartItems.length} items)</Link>
+                    </li>
                 </ul>
             </div>
         </div>
