@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, {
+    useMemo,
+    useState,
+    useEffect,
+    useCallback,
+    useRef,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "./CartItem";
 import ItemCard from "./ItemCard";
 import { clearCart } from "../utils/cartSlice";
+import { getFibonacciNumber } from "../utils/get-fibonacci";
 
 const CartPage = () => {
     // To get the cart items we need to Subscribe to the store using selector
@@ -11,11 +18,29 @@ const CartPage = () => {
     const [showNewCartPage, setShowNewCartPage] = useState(false);
     // We can decommission our old view once we are ok with new cart page changes
 
-    const handlePageSwitch = () => {
+    const [text, setText] = useState(0);
+
+    // useMemo usecase: Let us cache the result of a calculation or function between re-renders
+    // const fibonacciNumber = () => getFibonacciNumber(text);
+    const fibonacciNumber = useMemo(() => getFibonacciNumber(text), [text]);
+    // If we don't memoise this fibonacciNumber it will get rendered even if we switch the page or theme (big fibonacciNumber number will frozen screen)
+
+    useEffect(() => {
+        console.log(fibonacciNumber); // only logs when fibonacciNumber changes actually
+    }, [fibonacciNumber]);
+
+    // useCallback usecase: Let us cache a function definition between re-renders.
+    const handlePageSwitch = useCallback(() => {
         setShowNewCartPage(!showNewCartPage);
-    };
+    }, [showNewCartPage]);
+
+    // useRef useCase: Let us reference a value that's not needed for rendering.
+    const ref = useRef(0);
+    // This ref will hold and persists the assigned value to it even when component re-renders as state changes
+
     const handleClearCart = () => {
         dispatch(clearCart());
+        ref.current = ref.current + cartItems.length;
     };
 
     return (
@@ -36,6 +61,18 @@ const CartPage = () => {
                 >
                     Clear cart
                 </button>
+            </div>
+            <div className="text-center bg-gray-400">
+                <div>
+                    <input
+                        type="number"
+                        className="p-2 border-2"
+                        name="text"
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                    />
+                </div>
+                <p>nth fibonacci Number: {fibonacciNumber}</p>
             </div>
             {showNewCartPage === false
                 ? cartItems?.length > 0 && (
@@ -99,6 +136,11 @@ const CartPage = () => {
             {cartItems?.length === 0 && (
                 <div className="text-center m-50 font-bold">
                     <h2>Cart is empty.</h2>
+                    {ref.current !== 0 && (
+                        <h2>
+                            You have removed {ref.current} items from the cart
+                        </h2>
+                    )}
                     <h2>Add some items to the Cart.</h2>
                 </div>
             )}
